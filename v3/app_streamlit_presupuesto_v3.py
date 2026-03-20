@@ -609,7 +609,7 @@ with main_col:
         # Ocultamos NUIR del formulario
         st.session_state.nuir = NUIR_DEFAULT
         
-        ops_tipo_doc = ['COTIZACIÓN DE SERVICIO', 'PRESUPUESTO DE SERVICIO', 'ORDEN DE SERVICIO']
+        ops_tipo_doc = ['COTIZACIÓN DE SERVICIO', 'PRESUPUESTO DE SERVICIO']
         st.session_state.tipo_documento = st.selectbox('📄 Tipo de Documento', ops_tipo_doc, index=ops_tipo_doc.index(st.session_state.get('tipo_documento', 'COTIZACIÓN DE SERVICIO')))
 
         col1, col2 = st.columns(2)
