@@ -52,6 +52,11 @@ html, body, [class*="css"] {{
     font-family: 'Inter', sans-serif;
 }}
 
+/* Ocultar elementos por defecto de Streamlit (footer, decoraciones) */
+#MainMenu {{visibility: hidden;}}
+footer {{visibility: hidden;}}
+header {{visibility: hidden;}}
+
 .stApp {{
   background: radial-gradient(circle at 20% 20%, rgba(4,122,179,0.15), transparent 40%),
               radial-gradient(circle at 80% 80%, rgba(247,152,84,0.1), transparent 40%),
