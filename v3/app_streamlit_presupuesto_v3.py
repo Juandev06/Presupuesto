@@ -601,7 +601,7 @@ with main_col:
 
     # Formulario principal de captura de datos
     with st.form('form_presupuesto'):
-        st.markdown('#### 👤 1. Información del Cliente y General')
+        st.markdown('#### 👤 1. Información  Cliente ')
         col1, col2 = st.columns(2)
         with col1:
             st.session_state.nuir = st.text_input('🔢 Numero del Documento', value=st.session_state.nuir)
@@ -617,7 +617,7 @@ with main_col:
                 st.session_state.email = st.text_input('📧 Email', value=st.session_state.email)
 
         st.markdown('---')
-        st.markdown('#### 📏 2. Especificaciones Técnicas (Modificables)')
+        st.markdown('#### 📏 2. Especificaciones Técnicas')
         
         col3, col4, col5 = st.columns(3)
         with col3:
@@ -650,18 +650,8 @@ with main_col:
             st.session_state.boq_req = st.selectbox('🧱 Boquilla en mortero', ops_boq, format_func=clean_label, index=ops_boq.index(st.session_state.boq_req) if st.session_state.boq_req in ops_boq else 0)
             st.session_state.cant_boq = st.number_input('Cantidad boquillas', min_value=0, value=int(st.session_state.cant_boq), step=1)
 
-        st.markdown('---')
-        st.markdown('#### 📈 4. Parámetros Financieros')
-        f1, f2, f3 = st.columns(3)
-        with f1:
-            iva_input = st.slider('IVA (%)', min_value=0, max_value=19, value=int(IVA*100), step=1)
-        with f2:
-            adm_input = st.number_input('Administración (%)', min_value=0, max_value=100, value=int(ADM*100), step=1)
-        with f3:
-            util_input = st.number_input('Utilidad (%)', min_value=0, max_value=100, value=int(UTIL*100), step=1)
+st.markdown('<br>', unsafe_allow_html=True)
 
-        st.markdown('<br>', unsafe_allow_html=True)
-        
         # Centrar el botón del formulario
         col_btn_sub1, col_btn_sub2, col_btn_sub3 = st.columns([1, 2, 1])
         with col_btn_sub2:
@@ -670,10 +660,10 @@ with main_col:
 # ---------- Lógica de Procesamiento y Generación ----------
 
 if generar:
-    # Capturar montos dinámicos del usuario
-    tasa_iva = iva_input / 100.0
-    tasa_adm = adm_input / 100.0
-    tasa_util = util_input / 100.0
+    # Obtener valores directamente desde las constantes globales fijadas en el config CSV
+    tasa_iva = IVA
+    tasa_adm = ADM
+    tasa_util = UTIL
 
     # Pantalla de carga (UX mejorada)
     with st.status("🛠️ Generando presupuesto...", expanded=True) as status:
