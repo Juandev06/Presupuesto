@@ -26,12 +26,13 @@ st.set_page_config(
 )
 
 # Rutas de archivos de configuración y recursos
-CFG_PATH = 'config_presupuesto_acometidas_v3.csv'
-ASSET_HEADER_PDF = 'serviciudad_pdf_header.png'
-ASSET_LOGO_UI = 'logo.jpg'
-ASSET_FOOTER = 'serviciudad_pdf_footer.jpg'
-STATE_PATH = Path('consecutivo_state.json')
-OUTPUT_DIR = Path('salidas_pdf')
+BASE_DIR = Path(__file__).parent
+CFG_PATH = BASE_DIR / 'config_presupuesto_acometidas_v3.csv'
+ASSET_HEADER_PDF = BASE_DIR / 'serviciudad_pdf_header.png'
+ASSET_LOGO_UI = BASE_DIR / 'logo.jpg'
+ASSET_FOOTER = BASE_DIR / 'serviciudad_pdf_footer.jpg'
+STATE_PATH = BASE_DIR / 'consecutivo_state.json'
+OUTPUT_DIR = BASE_DIR / 'salidas_pdf'
 OUTPUT_DIR.mkdir(exist_ok=True)
 
 # --- Paleta de colores y estilos visuales ---
