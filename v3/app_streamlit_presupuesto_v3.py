@@ -530,7 +530,11 @@ if not st.session_state["authenticated"]:
             submit_button = st.form_submit_button("Ingresar", use_container_width=True)
             
             if submit_button:
-                if username.strip().lower() == "administraccioncotizaciones@serviciudad.com" and password == "adminserviciudad**":
+                # Obtenemos las credenciales desde los secretos inyectados o usamos unas por defecto en modo local de depuración
+                VALID_USER = st.secrets.get("admin_username", "administraccioncotizaciones@serviciudad.com")
+                VALID_PASS = st.secrets.get("admin_password", "adminserviciudad**")
+
+                if username.strip().lower() == VALID_USER and password == VALID_PASS:
                     st.session_state["authenticated"] = True
                     st.rerun()
                 else:
@@ -600,7 +604,7 @@ with main_col:
         st.markdown('#### 👤 1. Información del Cliente y General')
         col1, col2 = st.columns(2)
         with col1:
-            st.session_state.nuir = st.text_input('🔢 NUIR del Documento', value=st.session_state.nuir)
+            st.session_state.nuir = st.text_input('🔢 Numero del Documento', value=st.session_state.nuir)
             st.session_state.servicio = st.selectbox('💧 Tipo de Servicio', options_for('SERVICIO'), index=options_for('SERVICIO').index(st.session_state.servicio) if st.session_state.servicio in options_for('SERVICIO') else 0)
             st.session_state.direccion = st.text_input('📍 Dirección de la obra', value=st.session_state.direccion)
         with col2:
