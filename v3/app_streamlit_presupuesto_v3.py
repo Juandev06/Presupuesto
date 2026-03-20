@@ -510,19 +510,20 @@ if "authenticated" not in st.session_state:
     st.session_state["authenticated"] = False
 
 if not st.session_state["authenticated"]:
-    st.markdown(f"""
-    <div style="display: flex; justify-content: center; margin-top: 50px; margin-bottom: 20px;">
-        <img src="data:image/jpeg;base64,{_get_image_base64(ASSET_LOGO_UI)}" width="150" style="border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-    </div>
-    """, unsafe_allow_html=True)
-    
-    col1, col2, col3 = st.columns([1, 1.5, 1])
+    # Ampliamos la caja central reduciendo los márgenes laterales (cambiamos a 1.8 en el centro)
+    col1, col2, col3 = st.columns([1, 1.8, 1])
     with col2:
-        st.markdown('<div class="glass" style="text-align: center; padding: 40px !important;">', unsafe_allow_html=True)
-        st.markdown('<h2 style="color: white; margin-bottom: 20px; font-weight: 800;">Acceso Restringido</h2>', unsafe_allow_html=True)
-        st.markdown('<p style="color: #94a3b8; margin-bottom: 30px;">Por favor, identifícate para ingresar al aplicativo.</p>', unsafe_allow_html=True)
-        
+        st.markdown("<br><br>", unsafe_allow_html=True)
+        # Integramos Logo, Títulos y Formulario en una Sola "Caja" sin usar divs anidados externos
         with st.form("login_form"):
+            st.markdown(f"""
+            <div style="text-align: center; margin-bottom: 25px;">
+                <img src="data:image/jpeg;base64,{_get_image_base64(ASSET_LOGO_UI)}" width="140" style="border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); margin-bottom: 20px;">
+                <h2 style="color: white; margin-bottom: 5px; font-weight: 800; font-size: 32px;">Acceso Restringido</h2>
+                <p style="color: #94a3b8; font-size: 16px; margin-bottom: 0;">Por favor, identifícate para ingresar al aplicativo.</p>
+            </div>
+            """, unsafe_allow_html=True)
+            
             username = st.text_input("Correo electrónico", placeholder="correo@serviciudad.com")
             password = st.text_input("Contraseña", type="password", placeholder="••••••••")
             st.markdown("<br>", unsafe_allow_html=True)
@@ -535,8 +536,6 @@ if not st.session_state["authenticated"]:
                 else:
                     st.error("❌ Credenciales incorrectas.")
                     
-        st.markdown('</div>', unsafe_allow_html=True)
-    
     # Detenemos la ejecución del resto del script para proteger la app
     st.stop()
 
