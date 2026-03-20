@@ -515,7 +515,7 @@ with col_central:
             <p style="color: #94a3b8; font-size: 16px; margin: 0; margin-top: 5px;">Sistema Inteligente de Presupuesto para Acometidas</p>
         </div>
         <div>
-            <img src="data:image/jpeg;base64,{_get_image_base64(ASSET_LOGO_UI)}" width="150" style="border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+            <img src="data:image/jpeg;base64,{_get_image_base64(ASSET_LOGO_UI)}" width="110" style="border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
         </div>
     </div>
     """, unsafe_allow_html=True)
