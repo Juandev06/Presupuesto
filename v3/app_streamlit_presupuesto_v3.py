@@ -11,6 +11,7 @@ from pathlib import Path
 from reportlab.lib.units import cm
 import json
 import time
+import base64
 
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
@@ -201,6 +202,14 @@ def _load_state():
 def _save_state(state: dict):
     """Guarda el estado de los consecutivos en un archivo JSON."""
     STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding='utf-8')
+
+def _get_image_base64(path):
+    """Convierte una imagen local a base64 para inyectarla en un tag img de HTML directo."""
+    try:
+        with open(path, "rb") as image_file:
+            return base64.b64encode(image_file.read()).decode("utf-8")
+    except Exception:
+        return ""
 
 def next_consecutivo(prefix: str, digits: int) -> str:
     """Genera el siguiente número de consecutivo basado en el año actual."""
