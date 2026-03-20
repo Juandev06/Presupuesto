@@ -500,12 +500,15 @@ DEFAULTS = {
 for k,v in DEFAULTS.items():
     st.session_state.setdefault(k, v)
 
+if 'form_key' not in st.session_state:
+    st.session_state.form_key = 0
 
 def reset_form():
-    """Limpia todos los campos del formulario."""
+    """Limpia todos los campos del formulario y fuerza reinicio de UI."""
     for key in list(st.session_state.keys()):
-        if key != 'authenticated':
+        if key not in ['authenticated', 'form_key']:
             del st.session_state[key]
+    st.session_state.form_key += 1
     st.rerun()
 
 # ---------- Sistema de Login ----------
@@ -571,11 +574,9 @@ with col_central:
 _, main_col, _ = st.columns([1, 8, 1], gap='large')
 
 with main_col:
-    # Botones alineados y más pequeños a la derecha
-    col_btn1, col_btn2 = st.columns([4, 1])
-    with col_btn2:
-        if st.button('🧹 Limpiar', help='Haga clic para reiniciar todos los campos'):
-            reset_form()
+    # Botones centrados y anchos
+    if st.button('🧹 LIMPIAR FORMULARIO', use_container_width=True, type='primary', help='Borrar todos los datos y reiniciar'):
+        reset_form()
 
     # Expandible para configuraciones técnicas (firmas y NUIR)
     with st.expander('⚙️ Opciones Avanzadas (Documento y Firmas)', expanded=False):
@@ -603,7 +604,7 @@ with main_col:
             st.success('Cambios guardados exitosamente.')
 
     # Formulario principal de captura de datos
-    with st.form('form_presupuesto'):
+    with st.form(f'form_presupuesto_{st.session_state.form_key}'):
         st.markdown('#### 👤 1. Información Cliente')
         
         # Ocultamos NUIR del formulario
