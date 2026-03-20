@@ -493,20 +493,23 @@ def reset_form():
 
 # ---------- Interfaz de Usuario (Layout) ----------
 
-# Logo y Título lado a lado alineado y pequeño
-col_espacio, col_texto, col_logo, col_espacio2 = st.columns([1, 4, 1, 1])
-with col_texto:
-    st.markdown("""
-    <div style="text-align: right; padding-top: 15px; padding-right: 20px;">
-        <h1 style="font-size: 32px; font-weight: 800; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;">SERVICIUDAD E.S.P</h1>
-        <p style="color: #94a3b8; font-size: 16px; margin: 0;">Sistema Inteligente de Presupuesto para Acometidas</p>
+# Contenedor principal para centrar tanto el título como el logo
+col_espacio_izq, col_central, col_espacio_der = st.columns([1, 6, 1])
+
+with col_central:
+    # Usamos Flexbox de CSS para alinear perfectamente el texto a la izquierda y el logo a la derecha,
+    # pero manteniendo todo el bloque centrado en la pantalla.
+    st.markdown(f"""
+    <div style="display: flex; align-items: center; justify-content: center; gap: 30px; margin-top: 10px; margin-bottom: 30px;">
+        <div style="text-align: right;">
+            <h1 style="font-size: 38px; font-weight: 800; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;">SERVICIUDAD E.S.P</h1>
+            <p style="color: #94a3b8; font-size: 16px; margin: 0; margin-top: 5px;">Sistema Inteligente de Presupuesto para Acometidas</p>
+        </div>
+        <div>
+            <img src="data:image/jpeg;base64,{_get_image_base64(ASSET_LOGO_UI)}" width="150" style="border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+        </div>
     </div>
     """, unsafe_allow_html=True)
-with col_logo:
-    try:
-        st.image(ASSET_LOGO_UI, use_container_width=True)
-    except Exception:
-        pass
 
 # Layout centralizado principal
 _, main_col, _ = st.columns([1, 8, 1], gap='large')
