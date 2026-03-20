@@ -299,44 +299,41 @@ def build_pdf_bytes(meta: dict, items_df: pd.DataFrame, totals: dict) -> bytes:
     y -= 0.6 * cm
     c.drawCentredString(W / 2, y, "")
 
-    # --- Bloque de información del cliente (2 columnas) ---
-    y -= 1.0 * cm
-    xL = M
-    xR = M + content_w * 0.55  # Ajuste para que la segunda columna esté más a la derecha
+    # --- Bloque de información del cliente ---
+    y -= 0.5 * cm
     
-    # Reducido el salto de línea para ganar más espacio en la misma página
-    line_h = 0.45 * cm
-    step = 0.9 * cm
-
-    def field(x, y, label, value):
-        c.setFont('Helvetica-Bold', 9)
-        c.drawString(x, y, label)
-        c.setFont('Helvetica', 9)
-        c.drawString(x, y - line_h, str(value) if value is not None else "")
-
-    field(xL, y, "SERVICIO", meta.get("servicio", ""))
-    field(xR, y, "DIRECCIÓN", meta.get("direccion", ""))
-    y -= step
-
-    field(xL, y, "NOMBRE DEL CLIENTE", meta.get("nombre", ""))
-    field(xR, y, "CÉDULA", meta.get("cedula", ""))
-    y -= step
-
-    field(xL, y, "EMAIL", meta.get("email", ""))
-    field(xR, y, "TELÉFONO", meta.get("telefono", ""))
-    y -= step
-
-    field(xL, y, "DIÁMETRO ACOMETIDA", meta.get("diametro", ""))
-    field(xR, y, "TIPO DE SUPERFICIE", meta.get("superficie", ""))
-    y -= step
-
-    field(xL, y, "PROFUNDIDAD DE EXCAVACIÓN", meta.get("profundidad", ""))
-    field(xR, y, "CAJA DE INSPECCIÓN REQUIERE", meta.get("caja_req", ""))
-    y -= step
-
-    field(xL, y, "SILLA Y PVC", meta.get("silla_req", ""))
-    field(xR, y, "BOQUILLA MORTERO", meta.get("boq_req", ""))
-    y -= step + 0.3 * cm
+    info_data = [
+        ["SERVICIO", str(meta.get("servicio", "")).replace("_", " ")],
+        ["DIRECCIÓN", str(meta.get("direccion", "")).replace("_", " ")],
+        ["NOMBRE DEL CLIENTE", str(meta.get("nombre", "")).replace("_", " ")],
+        ["CÉDULA", str(meta.get("cedula", "")).replace("_", " ")],
+        ["EMAIL", str(meta.get("email", "")).replace("_", " ")],
+        ["TELÉFONO", str(meta.get("telefono", "")).replace("_", " ")],
+        ["DIÁMETRO ACOMETIDA", str(meta.get("diametro", "")).replace("_", " ")],
+        ["TIPO DE SUPERFICIE", str(meta.get("superficie", "")).replace("_", " ")],
+        ["PROFUNDIDAD DE EXCAVACIÓN", str(meta.get("profundidad", "")).replace("_", " ")],
+        ["CAJA DE INSPECCIÓN REQUIERE", str(meta.get("caja_req", "")).replace("_", " ")],
+        ["SILLA Y PVC", str(meta.get("silla_req", "")).replace("_", " ")],
+        ["BOQUILLA MORTERO", str(meta.get("boq_req", "")).replace("_", " ")],
+    ]
+    
+    info_t = Table(info_data, colWidths=[6.5 * cm, content_w - 6.5 * cm])
+    info_t.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (0, -1), colors.HexColor('#e0e0e0')),
+        ('TEXTCOLOR', (0, 0), (-1, -1), colors.black),
+        ('FONTNAME', (0, 0), (0, -1), 'Helvetica-Bold'),
+        ('FONTNAME', (1, 0), (1, -1), 'Helvetica'),
+        ('FONTSIZE', (0, 0), (-1, -1), 9),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+        ('ALIGN', (1, 0), (1, -1), 'CENTER'),
+        ('GRID', (0, 0), (-1, -1), 0.5, colors.black),
+        ('BOTTOMPADDING', (0, 0), (-1, -1), 3),
+        ('TOPPADDING', (0, 0), (-1, -1), 3),
+    ]))
+    
+    tw_info, th_info = info_t.wrapOn(c, content_w, H)
+    info_t.drawOn(c, M, y - th_info)
+    y -= th_info + 0.8 * cm
 
     # --- Tabla de ítems ---
     data = [list(items_df.columns)] + items_df.values.tolist()
