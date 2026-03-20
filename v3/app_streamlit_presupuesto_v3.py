@@ -494,19 +494,19 @@ def reset_form():
 # ---------- Interfaz de Usuario (Layout) ----------
 
 # Logo y Título lado a lado alineado y pequeño
-col_espacio, col_logo, col_texto, col_espacio2 = st.columns([1, 1, 4, 1])
+col_espacio, col_texto, col_logo, col_espacio2 = st.columns([1, 4, 1, 1])
+with col_texto:
+    st.markdown("""
+    <div style="text-align: right; padding-top: 15px; padding-right: 20px;">
+        <h1 style="font-size: 32px; font-weight: 800; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;">SERVICIUDAD E.S.P</h1>
+        <p style="color: #94a3b8; font-size: 16px; margin: 0;">Sistema Inteligente de Presupuesto para Acometidas</p>
+    </div>
+    """, unsafe_allow_html=True)
 with col_logo:
     try:
         st.image(ASSET_LOGO_UI, use_container_width=True)
     except Exception:
         pass
-with col_texto:
-    st.markdown("""
-    <div style="text-align: left; padding-top: 15px;">
-        <h1 style="font-size: 32px; font-weight: 800; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;">SERVICIUDAD E.S.P</h1>
-        <p style="color: #94a3b8; font-size: 16px; margin: 0;">Sistema Inteligente de Presupuesto para Acometidas</p>
-    </div>
-    """, unsafe_allow_html=True)
 
 # Layout centralizado principal
 _, main_col, _ = st.columns([1, 8, 1], gap='large')
