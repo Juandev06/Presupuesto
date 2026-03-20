@@ -478,7 +478,7 @@ def clean_label(text):
 
 DEFAULTS = {
     'nuir': NUIR_DEFAULT,
-    'tipo_documento': 'COTIZACIÓN DE SERVICIO',
+    'tipo_documento': None,
     'servicio': options_for('SERVICIO')[0] if options_for('SERVICIO') else 'ACUEDUCTO',
     'diametro': options_for('DIAMETRO')[0] if options_for('DIAMETRO') else '6"',
     'profundidad': options_for('PROFUNDIDAD')[0] if options_for('PROFUNDIDAD') else '0 a 1 m',
@@ -571,10 +571,10 @@ with col_central:
 _, main_col, _ = st.columns([1, 8, 1], gap='large')
 
 with main_col:
-    # Botón para limpiar formulario (centrado)
-    col_btn1, col_btn2, col_btn3 = st.columns([1, 2, 1])
+    # Botones alineados y más pequeños a la derecha
+    col_btn1, col_btn2 = st.columns([4, 1])
     with col_btn2:
-        if st.button('🧹 Limpiar Formulario', use_container_width=True):
+        if st.button('🧹 Limpiar', help='Haga clic para reiniciar todos los campos'):
             reset_form()
 
     # Expandible para configuraciones técnicas (firmas y NUIR)
@@ -610,7 +610,12 @@ with main_col:
         st.session_state.nuir = NUIR_DEFAULT
         
         ops_tipo_doc = ['COTIZACIÓN DE SERVICIO', 'PRESUPUESTO DE SERVICIO']
-        st.session_state.tipo_documento = st.selectbox('📄 Tipo de Documento', ops_tipo_doc, index=ops_tipo_doc.index(st.session_state.get('tipo_documento', 'COTIZACIÓN DE SERVICIO')))
+        
+        # Obtenemos valor actual, si no es uno de la lista lo dejamos como None
+        curr_val = st.session_state.get('tipo_documento')
+        curr_idx = ops_tipo_doc.index(curr_val) if curr_val in ops_tipo_doc else None
+        
+        st.session_state.tipo_documento = st.selectbox('📄 Tipo de Documento', ops_tipo_doc, index=curr_idx, placeholder='Seleccione el tipo...')
 
         col1, col2 = st.columns(2)
         with col1:
@@ -666,6 +671,10 @@ with main_col:
 # ---------- Lógica de Procesamiento y Generación ----------
 
 if generar:
+    if not st.session_state.tipo_documento:
+        st.error('❌ **ES NECESARIO SELECCIONAR UN TIPO DE DOCUMENTO** para proceder.', icon='🚨')
+        st.stop()
+        
     # Obtener valores directamente desde las constantes globales fijadas en el config CSV
     tasa_iva = IVA
     tasa_adm = ADM
