@@ -501,8 +501,44 @@ for k,v in DEFAULTS.items():
 def reset_form():
     """Limpia todos los campos del formulario."""
     for key in list(st.session_state.keys()):
-        del st.session_state[key]
+        if key != 'authenticated':
+            del st.session_state[key]
     st.rerun()
+
+# ---------- Sistema de Login ----------
+if "authenticated" not in st.session_state:
+    st.session_state["authenticated"] = False
+
+if not st.session_state["authenticated"]:
+    st.markdown(f"""
+    <div style="display: flex; justify-content: center; margin-top: 50px; margin-bottom: 20px;">
+        <img src="data:image/jpeg;base64,{_get_image_base64(ASSET_LOGO_UI)}" width="150" style="border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
+    </div>
+    """, unsafe_allow_html=True)
+    
+    col1, col2, col3 = st.columns([1, 1.5, 1])
+    with col2:
+        st.markdown('<div class="glass" style="text-align: center; padding: 40px !important;">', unsafe_allow_html=True)
+        st.markdown('<h2 style="color: white; margin-bottom: 20px; font-weight: 800;">Acceso Restringido</h2>', unsafe_allow_html=True)
+        st.markdown('<p style="color: #94a3b8; margin-bottom: 30px;">Por favor, identifícate para ingresar al aplicativo.</p>', unsafe_allow_html=True)
+        
+        with st.form("login_form"):
+            username = st.text_input("Correo electrónico", placeholder="correo@serviciudad.com")
+            password = st.text_input("Contraseña", type="password", placeholder="••••••••")
+            st.markdown("<br>", unsafe_allow_html=True)
+            submit_button = st.form_submit_button("Ingresar", use_container_width=True)
+            
+            if submit_button:
+                if username.strip().lower() == "administraccioncotizaciones@serviciudad.com" and password == "adminserviciudad**":
+                    st.session_state["authenticated"] = True
+                    st.rerun()
+                else:
+                    st.error("❌ Credenciales incorrectas.")
+                    
+        st.markdown('</div>', unsafe_allow_html=True)
+    
+    # Detenemos la ejecución del resto del script para proteger la app
+    st.stop()
 
 
 # ---------- Interfaz de Usuario (Layout) ----------
