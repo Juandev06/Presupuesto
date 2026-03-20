@@ -1,0 +1,18 @@
+# Entornos virtuales
+.venv/
+venv/
+env/
+ENV/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos locales o generados dinámicamente
+v3/salidas_pdf/*.pdf
+*.log
+
+# Ocultar configuraciones del SO
+.DS_Store
+Thumbs.db
