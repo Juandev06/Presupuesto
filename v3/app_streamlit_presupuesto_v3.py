@@ -295,7 +295,7 @@ def build_pdf_bytes(meta: dict, items_df: pd.DataFrame, totals: dict) -> bytes:
     # --- Títulos del documento ---
     y = info_y - 1.5 * cm
     c.setFont('Helvetica-Bold', 13)
-    c.drawCentredString(W / 2, y, "COTIZACIÓN DE SERVICIO")
+    c.drawCentredString(W / 2, y, meta.get("tipo_documento", "COTIZACIÓN DE SERVICIO"))
     y -= 0.6 * cm
     c.drawCentredString(W / 2, y, "")
 
@@ -478,6 +478,7 @@ def clean_label(text):
 
 DEFAULTS = {
     'nuir': NUIR_DEFAULT,
+    'tipo_documento': 'COTIZACIÓN DE SERVICIO',
     'servicio': options_for('SERVICIO')[0] if options_for('SERVICIO') else 'ACUEDUCTO',
     'diametro': options_for('DIAMETRO')[0] if options_for('DIAMETRO') else '6"',
     'profundidad': options_for('PROFUNDIDAD')[0] if options_for('PROFUNDIDAD') else '0 a 1 m',
@@ -607,6 +608,9 @@ with main_col:
         
         # Ocultamos NUIR del formulario
         st.session_state.nuir = NUIR_DEFAULT
+        
+        ops_tipo_doc = ['COTIZACIÓN DE SERVICIO', 'PRESUPUESTO DE SERVICIO', 'ORDEN DE SERVICIO']
+        st.session_state.tipo_documento = st.selectbox('📄 Tipo de Documento', ops_tipo_doc, index=ops_tipo_doc.index(st.session_state.get('tipo_documento', 'COTIZACIÓN DE SERVICIO')))
 
         col1, col2 = st.columns(2)
         with col1:
@@ -721,6 +725,7 @@ if generar:
         st.write("Construyendo PDF oficial...")
         meta = {
             'nuir': st.session_state.nuir,
+            'tipo_documento': st.session_state.tipo_documento,
             'consecutivo': consecutivo,
             'fecha_visible': fecha_visible,
             'servicio': servicio,
