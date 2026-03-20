@@ -650,7 +650,7 @@ with main_col:
             st.session_state.boq_req = st.selectbox('🧱 Boquilla en mortero', ops_boq, format_func=clean_label, index=ops_boq.index(st.session_state.boq_req) if st.session_state.boq_req in ops_boq else 0)
             st.session_state.cant_boq = st.number_input('Cantidad boquillas', min_value=0, value=int(st.session_state.cant_boq), step=1)
 
-st.markdown('<br>', unsafe_allow_html=True)
+        st.markdown('<br>', unsafe_allow_html=True)
 
         # Centrar el botón del formulario
         col_btn_sub1, col_btn_sub2, col_btn_sub3 = st.columns([1, 2, 1])
