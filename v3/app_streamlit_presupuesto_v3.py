@@ -295,9 +295,9 @@ def build_pdf_bytes(meta: dict, items_df: pd.DataFrame, totals: dict) -> bytes:
     # --- Títulos del documento ---
     y = info_y - 1.5 * cm
     c.setFont('Helvetica-Bold', 13)
-    c.drawCentredString(W / 2, y, "PRESUPUESTO DE OBRA CIVIL")
+    c.drawCentredString(W / 2, y, "COTIZACIÓN DE SERVICIO")
     y -= 0.6 * cm
-    c.drawCentredString(W / 2, y, "CONSTRUCCIÓN ACOMETIDA")
+    c.drawCentredString(W / 2, y, "")
 
     # --- Bloque de información del cliente (2 columnas) ---
     y -= 1.0 * cm
@@ -640,15 +640,12 @@ with main_col:
         with a1:
             ops_caja = options_for('CAJA_INSPECCION')
             st.session_state.caja_req = st.selectbox('📦 Caja de inspección', ops_caja, format_func=clean_label, index=ops_caja.index(st.session_state.caja_req) if st.session_state.caja_req in ops_caja else 0)
-            st.session_state.cant_caja = st.number_input('Cantidad cajas', min_value=0, value=int(st.session_state.cant_caja), step=1)
         with a2:
             ops_silla = options_for('SILLA_PVC')
             st.session_state.silla_req = st.selectbox('🪑 Silla Y - PVC', ops_silla, format_func=clean_label, index=ops_silla.index(st.session_state.silla_req) if st.session_state.silla_req in ops_silla else 0)
-            st.session_state.cant_silla = st.number_input('Cantidad sillas', min_value=0, value=int(st.session_state.cant_silla), step=1)
         with a3:
             ops_boq = options_for('BOQUILLA_MORTERO')
             st.session_state.boq_req = st.selectbox('🧱 Boquilla en mortero', ops_boq, format_func=clean_label, index=ops_boq.index(st.session_state.boq_req) if st.session_state.boq_req in ops_boq else 0)
-            st.session_state.cant_boq = st.number_input('Cantidad boquillas', min_value=0, value=int(st.session_state.cant_boq), step=1)
 
         st.markdown('<br>', unsafe_allow_html=True)
 
@@ -685,14 +682,14 @@ if generar:
         costo_silla_u = accesorio(servicio, 'SILLA_PVC', diametro)
         costo_boq_u = accesorio(servicio, 'BOQUILLA_MORTERO', diametro)
 
-        # Verificación lógica de requerimientos vs cantidades
-        caja_si = 'SI' in str(st.session_state.caja_req).upper() and st.session_state.cant_caja > 0
-        silla_si = 'SI' in str(st.session_state.silla_req).upper() and st.session_state.cant_silla > 0
-        boq_si = 'SI' in str(st.session_state.boq_req).upper() and st.session_state.cant_boq > 0
+        # Verificación lógica de requerimientos. Se asume 1 unidad base de cada cosa si requieren SI
+        caja_si = 'SI' in str(st.session_state.caja_req).upper()
+        silla_si = 'SI' in str(st.session_state.silla_req).upper()
+        boq_si = 'SI' in str(st.session_state.boq_req).upper()
 
-        total_caja = (int(st.session_state.cant_caja) * costo_caja_u) if caja_si else 0.0
-        total_silla = (int(st.session_state.cant_silla) * costo_silla_u) if silla_si else 0.0
-        total_boq = (int(st.session_state.cant_boq) * costo_boq_u) if boq_si else 0.0
+        total_caja = (1 * costo_caja_u) if caja_si else 0.0
+        total_silla = (1 * costo_silla_u) if silla_si else 0.0
+        total_boq = (1 * costo_boq_u) if boq_si else 0.0
 
         # Totales financieros dinámicos
         costo_directo = base_total + total_caja + total_silla + total_boq
@@ -709,10 +706,10 @@ if generar:
         # Construcción de la tabla de ítems para visualización y PDF
         items = []
         items.append({'Ítem':'1.1','Descripción':'Incluye: Señalización - Excavaciones\nLlenos- Retiros - Tuberia Novafort-\nSub base - Transporte','Unidad':'ML','Cantidad': ml,'Valor Unitario': money(base_unit),'Valor Total': money(base_total)})
-        items.append({'Ítem':'1.2.','Descripción':'Caja de inspección en concreto de\n17,2 Mpa, tapa reforzada en concreto de 20,7 Mpa','Unidad':'UND','Cantidad': int(st.session_state.cant_caja) if caja_si else 0,'Valor Unitario': money(costo_caja_u),'Valor Total': money(total_caja)})
-        items.append({'Ítem':'1.3','Descripción':'Accesorio alcantarillado silla Yee\nPVC','Unidad':'UND','Cantidad': int(st.session_state.cant_silla) if silla_si else 0,'Valor Unitario': money(costo_silla_u),'Valor Total': money(total_silla)})
+        items.append({'Ítem':'1.2.','Descripción':'Caja de inspección en concreto de\n17,2 Mpa, tapa reforzada en concreto de 20,7 Mpa','Unidad':'UND','Cantidad': 1 if caja_si else 0,'Valor Unitario': money(costo_caja_u),'Valor Total': money(total_caja)})
+        items.append({'Ítem':'1.3','Descripción':'Accesorio alcantarillado silla Yee\nPVC','Unidad':'UND','Cantidad': 1 if silla_si else 0,'Valor Unitario': money(costo_silla_u),'Valor Total': money(total_silla)})
         desc_boq = 'Emboquillado de tubo en mortero 1:2' if boq_si else 'No lleva Boquilla Mortero'
-        items.append({'Ítem':'1.4','Descripción': desc_boq,'Unidad':'UND','Cantidad': int(st.session_state.cant_boq) if boq_si else 0,'Valor Unitario': money(costo_boq_u),'Valor Total': money(total_boq)})
+        items.append({'Ítem':'1.4','Descripción': desc_boq,'Unidad':'UND','Cantidad': 1 if boq_si else 0,'Valor Unitario': money(costo_boq_u),'Valor Total': money(total_boq)})
 
         items_df = pd.DataFrame(items)
 
