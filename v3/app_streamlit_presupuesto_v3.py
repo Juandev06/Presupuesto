@@ -603,15 +603,18 @@ with main_col:
 
     # Formulario principal de captura de datos
     with st.form('form_presupuesto'):
-        st.markdown('#### 👤 1. Información  Cliente ')
+        st.markdown('#### 👤 1. Información Cliente')
+        
+        # Ocultamos NUIR del formulario
+        st.session_state.nuir = NUIR_DEFAULT
+
         col1, col2 = st.columns(2)
         with col1:
-            st.session_state.nuir = st.text_input('🔢 Numero del Documento', value=st.session_state.nuir)
-            st.session_state.servicio = st.selectbox('💧 Tipo de Servicio', options_for('SERVICIO'), index=options_for('SERVICIO').index(st.session_state.servicio) if st.session_state.servicio in options_for('SERVICIO') else 0)
-            st.session_state.direccion = st.text_input('📍 Dirección de la obra', value=st.session_state.direccion)
-        with col2:
             st.session_state.nombre = st.text_input('📝 Nombre / Razón Social', value=st.session_state.nombre)
             st.session_state.cedula = st.text_input('🪪 Identificación (Cédula/NIT)', value=st.session_state.cedula)
+            st.session_state.direccion = st.text_input('📍 Dirección de la obra', value=st.session_state.direccion)
+        with col2:
+            st.session_state.servicio = st.selectbox('💧 Tipo de Servicio', options_for('SERVICIO'), index=options_for('SERVICIO').index(st.session_state.servicio) if st.session_state.servicio in options_for('SERVICIO') else 0)
             col2_1, col2_2 = st.columns(2)
             with col2_1:
                 st.session_state.telefono = st.text_input('📱 Teléfono', value=st.session_state.telefono)
