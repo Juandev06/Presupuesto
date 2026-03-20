@@ -269,17 +269,17 @@ def build_pdf_bytes(meta: dict, items_df: pd.DataFrame, totals: dict) -> bytes:
         pass
 
     # --- Pie de página ---
-    footer_h = 0.35 * cm
-    footer_y = M
-    try:
-        c.drawImage(
-            ASSET_FOOTER,
-            M, footer_y,
-            width=content_w, height=footer_h,
-            preserveAspectRatio=True, mask='auto'
-        )
-    except Exception:
-        pass
+    # footer_h = 0.35 * cm
+    # footer_y = M
+    # try:
+    #     c.drawImage(
+    #         ASSET_FOOTER,
+    #         M, footer_y,
+    #         width=content_w, height=footer_h,
+    #         preserveAspectRatio=True, mask='auto'
+    #     )
+    # except Exception:
+    #     pass
 
     # --- Datos de control (NUIR, Consecutivo, Fecha) alineados a la derecha ---
     # Al usar el banner, bajamos un poco más el texto para separar del logo
