@@ -20,7 +20,7 @@ from reportlab.platypus import Table, TableStyle
 
 # Configuración de la página de Streamlit
 st.set_page_config(
-    page_title='Presupuesto Acometidas - SERVICIUDAD', 
+    page_title='Presupuesto - Cotizaciones - SERVICIUDAD', 
     page_icon='💧', 
     layout='wide',
     initial_sidebar_state='collapsed'
