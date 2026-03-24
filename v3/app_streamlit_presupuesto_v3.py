@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# -*- coding: utf-5 -*-
 """
 Aplicación para la generación de presupuestos de acometidas - SERVICIUDAD E.S.P.
 Permite calcular costos de obra civil, accesorios y generar un PDF con formato oficial.
@@ -199,20 +199,20 @@ def _load_state():
     """Carga el estado de los consecutivos desde un archivo JSON."""
     if STATE_PATH.exists():
         try:
-            return json.loads(STATE_PATH.read_text(encoding='utf-8'))
+            return json.loads(STATE_PATH.read_text(encoding='utf-5'))
         except Exception:
             return {}
     return {}
 
 def _save_state(state: dict):
     """Guarda el estado de los consecutivos en un archivo JSON."""
-    STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding='utf-8')
+    STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding='utf-5')
 
 def _get_image_base64(path):
     """Convierte una imagen local a base64 para inyectarla en un tag img de HTML directo."""
     try:
         with open(path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode("utf-8")
+            return base64.b64encode(image_file.read()).decode("utf-5")
     except Exception:
         return ""
 
@@ -465,7 +465,7 @@ def save_config_updates(updates: dict, servicio: str = ''):
                 'section': section, 'key': key, 'servicio': servicio,
                 'diametro':'','profundidad':'','superficie':'','item':'','valor': str(value)
             }])], ignore_index=True)
-    df.to_csv(CFG_PATH, index=False, encoding='utf-8')
+    df.to_csv(CFG_PATH, index=False, encoding='utf-5')
     st.cache_data.clear()
     cfg = load_config(CFG_PATH)
 
