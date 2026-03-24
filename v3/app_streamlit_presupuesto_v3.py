@@ -616,12 +616,12 @@ with main_col:
         curr_val = st.session_state.get('tipo_documento')
         curr_idx = ops_tipo_doc.index(curr_val) if curr_val in ops_tipo_doc else None
         
-        st.session_state.tipo_documento = st.selectbox('📄 Tipo de Documento', ops_tipo_doc, index=curr_idx, placeholder='Seleccione el tipo...')
+        st.session_state.tipo_documento = st.selectbox('📄 Tipo de Documento', ops_tipo_doc, index=curr_idx, placeholder='Seleccione el tipo el tipo de documento')
 
         col1, col2 = st.columns(2)
         with col1:
-            st.session_state.nombre = st.text_input('📝 Nombre / Razón Social', value=st.session_state.nombre)
-            st.session_state.cedula = st.text_input('🪪 Identificación (Cédula/NIT)', value=st.session_state.cedula)
+            st.session_state.nombre = st.text_input('📝 Nombre - Razón Social', value=st.session_state.nombre)
+            st.session_state.cedula = st.text_input('🪪 Identificación (Cédula - NIT)', value=st.session_state.cedula)
             st.session_state.direccion = st.text_input('📍 Dirección de la obra', value=st.session_state.direccion)
         with col2:
             st.session_state.servicio = st.selectbox('💧 Tipo de Servicio', options_for('SERVICIO'), index=options_for('SERVICIO').index(st.session_state.servicio) if st.session_state.servicio in options_for('SERVICIO') else 0)
@@ -797,5 +797,4 @@ if generar:
                 use_container_width=True
             )
         st.markdown('</div>', unsafe_allow_html=True)
-
 
