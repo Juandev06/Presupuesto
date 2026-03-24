@@ -1,11 +1,11 @@
-# -*- coding: utf-5 -*-
+# -*- coding: utf-8 -*-
 """
 Aplicación para la generación de presupuestos de acometidas - SERVICIUDAD E.S.P.
 Permite calcular costos de obra civil, accesorios y generar un PDF con formato oficial.
 """
 import streamlit as st
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from io import BytesIO
 from pathlib import Path
 from reportlab.lib.units import cm
@@ -199,26 +199,26 @@ def _load_state():
     """Carga el estado de los consecutivos desde un archivo JSON."""
     if STATE_PATH.exists():
         try:
-            return json.loads(STATE_PATH.read_text(encoding='utf-5'))
+            return json.loads(STATE_PATH.read_text(encoding='utf-8'))
         except Exception:
             return {}
     return {}
 
 def _save_state(state: dict):
     """Guarda el estado de los consecutivos en un archivo JSON."""
-    STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding='utf-5')
+    STATE_PATH.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding='utf-8')
 
 def _get_image_base64(path):
     """Convierte una imagen local a base64 para inyectarla en un tag img de HTML directo."""
     try:
         with open(path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode("utf-5")
+            return base64.b64encode(image_file.read()).decode("utf-8")
     except Exception:
         return ""
 
 def next_consecutivo(prefix: str, digits: int) -> str:
     """Genera el siguiente número de consecutivo basado en el año actual."""
-    year = datetime.now().year
+    year = datetime.now(timezone(timedelta(hours=-5))).year
     state = _load_state()
     key = f"{prefix}-{year}"
     n = int(state.get(key, 0)) + 1
@@ -465,7 +465,7 @@ def save_config_updates(updates: dict, servicio: str = ''):
                 'section': section, 'key': key, 'servicio': servicio,
                 'diametro':'','profundidad':'','superficie':'','item':'','valor': str(value)
             }])], ignore_index=True)
-    df.to_csv(CFG_PATH, index=False, encoding='utf-5')
+    df.to_csv(CFG_PATH, index=False, encoding='utf-8')
     st.cache_data.clear()
     cfg = load_config(CFG_PATH)
 
@@ -720,7 +720,7 @@ if generar:
 
         st.write("Generando consecutivo...")
         consecutivo = next_consecutivo(PREFIJO, DIGITOS)
-        fecha_visible = datetime.now().strftime('%d/%m/%Y %H:%M')
+        fecha_visible = datetime.now(timezone(timedelta(hours=-5))).strftime('%d/%m/%Y %H:%M')
 
         # Construcción de la tabla de ítems para visualización y PDF
         items = []
@@ -764,7 +764,7 @@ if generar:
         pdf_bytes = build_pdf_bytes(meta, items_df[['Ítem','Descripción','Unidad','Cantidad','Valor Unitario','Valor Total']], totals)
 
         # Guardar en servidor de forma silenciosa
-        safe_fecha = datetime.now().strftime('%Y%m%d_%H%M')
+        safe_fecha = datetime.now(timezone(timedelta(hours=-5))).strftime('%Y%m%d_%H%M')
         out_name = f"{consecutivo}_{safe_fecha}.pdf"
         (OUTPUT_DIR / out_name).write_bytes(pdf_bytes)
         
