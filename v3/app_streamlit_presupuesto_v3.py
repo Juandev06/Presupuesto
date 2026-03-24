@@ -537,7 +537,7 @@ if not st.session_state["authenticated"]:
             
             if submit_button:
                 # Obtenemos las credenciales desde los secretos inyectados o usamos unas por defecto en modo local de depuración
-                VALID_USER = st.secrets.get("admin_username", "administraccioncotizaciones@serviciudad.com")
+                VALID_USER = st.secrets.get("admin_username", "adminaplicativo@serviciudad.com")
                 VALID_PASS = st.secrets.get("admin_password", "adminserviciudad**")
 
                 if username.strip().lower() == VALID_USER and password == VALID_PASS:
